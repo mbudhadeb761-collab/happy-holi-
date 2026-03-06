@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Holi - Create Your Personalized Wish</title>
+    <!-- Font Awesome 6 Free -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Video Container - Full Screen Fixed */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        #holiVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Spacer - ভিডিও দেখানোর জন্য ফাঁকা জায়গা */
+        .spacer {
+            height: 60vh;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Content Overlay */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px 100px 20px;
+            pointer-events: none;
+        }
+
+        .wish-box {
+            background: rgba(20, 10, 30, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 50px 50px 30px 30px;
+            padding: 40px 30px;
+            max-width: 700px;
+            width: 100%;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            text-align: center;
+            pointer-events: auto;
+            margin: 20px 0 30px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.95);
+            font-size: 1.5rem;
+            margin-bottom: 35px;
+            font-style: italic;
+            text-shadow: 0 2px 10px rgba(255,150,0,0.5);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .input-group input {
+            padding: 18px 25px;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            width: 320px;
+            background: rgba(255,255,255,0.98);
+            border: 2px solid #ff9933;
+            outline: none;
+            text-align: center;
+            font-weight: normal;
+            color: #2d1b45;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .input-group input::placeholder {
+            color: #666;
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        .input-group button {
+            padding: 18px 35px;
+            border: none;
+            border-radius: 60px;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(255,75,43,0.4);
+        }
+
+        .input-group button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255,75,43,0.7);
+        }
+
+        .share-section {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0 15px;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 16px 28px;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid white;
+            text-decoration: none;
+            color: white;
+            flex: 1;
+            min-width: 170px;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .wa-btn {
+            background: #25D366;
+        }
+
+        .wa-btn:hover {
+            background: #128C7E;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px #25D36680;
+        }
+
+        .share-all-btn {
+            background: #4267B2;
+        }
+
+        .share-all-btn:hover {
+            background: #365899;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px #4267B280;
+        }
+
+        .copy-btn {
+            background: #ff3366;
+        }
+
+        .copy-btn:hover {
+            background: #e6005c;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px #ff336680;
+        }
+
+        /* Ad Containers */
+        .ad-top {
+            position: relative;
+            z-index: 15;
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            margin-top: 5px;
+        }
+
+        .ad-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(8px);
+            padding: 10px 0;
+            border-top: 1px solid rgba(255,215,0,0.3);
+        }
+
+        .ad-inline-1, .ad-inline-2 {
+            margin: 25px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255,215,0,0.2);
+        }
+
+        .hidden-name, .hidden-link {
+            display: none;
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.95);
+            color: #ffcc00;
+            padding: 15px 35px;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            z-index: 1000;
+            border: 2px solid #ff9933;
+            box-shadow: 0 5px 30px rgba(255,200,0,0.4);
+            transition: opacity 0.5s;
+            opacity: 0;
+            pointer-events: none;
+            font-weight: 500;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff9933;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff416c;
+        }
+
+        @media (max-width: 600px) {
+            .spacer {
+                height: 50vh;
+            }
+            
+            .wish-box {
+                padding: 30px 20px;
+            }
+            
+            .subtitle {
+                font-size: 1.3rem;
+                margin-bottom: 30px;
+            }
+            
+            .share-btn {
+                padding: 14px 20px;
+                font-size: 1.1rem;
+                min-width: 140px;
+            }
+            
+            .input-group input {
+                width: 100%;
+                padding: 16px 20px;
+            }
+            
+            .input-group button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .toast-message {
+                bottom: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video id="holiVideo" autoplay loop muted playsinline>
+            <source src="holi-animation.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Ad 1: Top Banner (728x90) -->
+    <div class="ad-top">
+        <script>
+            atOptions = {
+                'key' : '79e83123df80ea76bade9e3b8bd83f55',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highperformanceformat.com/79e83123df80ea76bade9e3b8bd83f55/invoke.js"></script>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="content-wrapper">
+        <div class="wish-box">
+            <div class="subtitle">🌸 festival of colors 🌸</div>
+
+            <!-- Ad 2: Inline Ad 1 (320x50) -->
+            <div class="ad-inline-1">
+                <script>
+                    atOptions = {
+                        'key' : 'a1fe59203ad0d0f20eb16acedd06cb99',
+                        'format' : 'iframe',
+                        'height' : 50,
+                        'width' : 320,
+                        'params' : {}
+                    };
+                </script>
+                <script src="https://www.highperformanceformat.com/a1fe59203ad0d0f20eb16acedd06cb99/invoke.js"></script>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="friendName" placeholder="Enter your name" value="">
+                <button onclick="generateAndShareLink()">
+                    <i class="fas fa-magic"></i> create link
+                </button>
+            </div>
+
+            <!-- Ad 3: Inline Ad 2 (300x250) -->
+            <div class="ad-inline-2">
+                <script>
+                    atOptions = {
+                        'key' : '6cf96219e28c241c6c74acdcc5aa5210',
+                        'format' : 'iframe',
+                        'height' : 250,
+                        'width' : 300,
+                        'params' : {}
+                    };
+                </script>
+                <script src="https://www.highperformanceformat.com/6cf96219e28c241c6c74acdcc5aa5210/invoke.js"></script>
+            </div>
+
+            <div class="share-section">
+                <button class="share-btn wa-btn" onclick="shareViaWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+                <button class="share-btn share-all-btn" onclick="shareViaOthers()">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+                <button class="share-btn copy-btn" onclick="copyLinkOnly()">
+                    <i class="fas fa-copy"></i> Copy
+                </button>
+            </div>
+
+            <div id="hiddenNameContainer" class="hidden-name"></div>
+            <div id="hiddenLinkContainer" class="hidden-link"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast-message"></div>
+
+    <script>
+        let currentName = '';
+
+        function generateAndShareLink() {
+            const nameInput = document.getElementById('friendName');
+            let name = nameInput.value.trim();
+            
+            if (name === '') {
+                showToast('⚠️ Please enter your name first!');
+                nameInput.focus();
+                return false;
+            }
+            
+            currentName = name;
+            document.getElementById('hiddenNameContainer').innerText = name;
+            
+            const baseUrl = window.location.origin + window.location.pathname;
+            const baseDir = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1);
+            const link = `${baseDir}wish.html?name=${encodeURIComponent(name)}`;
+            
+            document.getElementById('hiddenLinkContainer').innerText = link;
+            
+            showToast(`✨ Personalized link ready for ${name}!`);
+            return true;
+        }
+
+        function shareViaWhatsApp() {
+            if (!currentName) {
+                showToast('⚠️ First create link with your name!');
+                return;
+            }
+            
+            const name = currentName;
+            const link = document.getElementById('hiddenLinkContainer').innerText;
+            
+            const message = `🌈 *Happy Holi!* 🌈\n\n${name} ar torop thaka *happy holi*! 🎨\n\nএখানে তোমার জন্য রঙিন শুভেচ্ছা: ${link}`;
+            
+            const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+            
+            showToast('Opening WhatsApp...');
+        }
+
+        function shareViaOthers() {
+            if (!currentName) {
+                showToast('⚠️ First create link with your name!');
+                return;
+            }
+            
+            const name = currentName;
+            const link = document.getElementById('hiddenLinkContainer').innerText;
+            
+            const shareData = {
+                title: 'Happy Holi Wish',
+                text: `${name} ar torop thaka happy holi! 🌈`,
+                url: link
+            };
+            
+            if (navigator.share) {
+                navigator.share(shareData)
+                    .then(() => showToast('Shared successfully!'))
+                    .catch((error) => {
+                        if (error.name !== 'AbortError') {
+                            fallbackShare(name, link);
+                        }
+                    });
+            } else {
+                fallbackShare(name, link);
+            }
+        }
+
+        function fallbackShare(name, link) {
+            const message = `${name} ar torop thaka happy holi! 🌈 ${link}`;
+            prompt('Copy this link and share:', message);
+        }
+
+        function copyLinkOnly() {
+            if (!currentName) {
+                showToast('⚠️ First create link with your name!');
+                return;
+            }
+            
+            const link = document.getElementById('hiddenLinkContainer').innerText;
+            
+            navigator.clipboard.writeText(link).then(() => {
+                showToast('✅ Link copied to clipboard!');
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = link;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('✅ Link copied!');
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '1';
+            toast.innerText = message;
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+
+        document.getElementById('friendName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateAndShareLink();
+            }
+        });
+
+        window.onload = function() {
+            document.getElementById('friendName').value = '';
+            currentName = '';
+        };
+    </script>
+</body> 
+</html>
