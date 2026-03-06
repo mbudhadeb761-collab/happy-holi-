@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Holi - Personalized Wish</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Video Container - Full Screen */
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        #holiVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Firecracker Canvas - ভিডিওর উপরে */
+        #firecrackerCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Content Overlay - উইশ মেসেজ (ক্র্যাকারের উপরে) */
+        .content-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+
+        .wish-message {
+            text-align: center;
+            color: white;
+            max-width: 900px;
+            width: 100%;
+            padding: 30px 40px;
+            /* ব্যাকগ্রাউন্ড এবং ব্লার সরানো হয়েছে */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .greeting {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #FFFFFF;
+            text-shadow: 0 0 20px #FF3366, 0 0 40px #FF9933, 0 0 60px #FFCC00;
+            line-height: 1.2;
+            animation: glowPulse 2s infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            from { text-shadow: 0 0 20px #FF3366, 0 0 40px #FF9933; }
+            to { text-shadow: 0 0 30px #FF9933, 0 0 60px #FF3366, 0 0 80px #4ECDC4; }
+        }
+
+        .person-name {
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: #FFE66D;
+            text-shadow: 0 0 20px #FF6B6B, 0 0 40px #4ECDC4, 0 0 60px #FFD700;
+            margin: 15px 0;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            word-break: break-word;
+            animation: popIn 0.5s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .blessing {
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: #FFFFFF;
+            margin: 15px 0 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 20px rgba(255,215,0,0.5);
+            line-height: 1.4;
+        }
+
+        .blessing span {
+            font-weight: 700;
+            font-size: 2.5rem;
+            display: inline-block;
+            margin-top: 5px;
+            color: #FFD700;
+            text-shadow: 0 0 20px #FF6B6B, 0 0 40px #FF9933;
+        }
+
+        .sub-text {
+            font-size: 1.8rem;
+            color: rgba(255,255,255,0.95);
+            margin-top: 15px;
+            font-style: italic;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* ছোট এড - নিচের দিকে */
+        .small-ad {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
+            border-radius: 10px;
+            padding: 5px 10px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .greeting { font-size: 2.8rem; }
+            .person-name { font-size: 3.2rem; }
+            .blessing { font-size: 1.6rem; }
+            .blessing span { font-size: 1.9rem; }
+            .sub-text { font-size: 1.4rem; }
+            .wish-message { padding: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .greeting { font-size: 2.2rem; }
+            .person-name { font-size: 2.5rem; }
+            .blessing { font-size: 1.3rem; }
+            .blessing span { font-size: 1.6rem; }
+            .sub-text { font-size: 1.1rem; }
+            .small-ad { transform: translateX(-50%) scale(0.9); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Video Animation -->
+    <div class="video-container">
+        <video id="holiVideo" autoplay loop muted playsinline>
+            <source src="holi-animation.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Firecracker Animation Canvas -->
+    <canvas id="firecrackerCanvas"></canvas>
+
+    <!-- Main Wish Message (একদম মাঝখানে) - কোন ব্যাকগ্রাউন্ড নেই -->
+    <div class="content-overlay">
+        <div class="wish-message">
+            <div class="greeting">Happy Holi</div>
+            <div class="person-name" id="displayName">Friend</div>
+            <div class="blessing">
+                May your life be filled with<br>
+                <span>colors of happiness and joy</span>
+            </div>
+            <div class="sub-text">🌸 festival of colors 🌸</div>
+        </div>
+    </div>
+
+    <!-- ছোট এड -->
+    <div class="small-ad">
+        <script>
+            atOptions = {
+                'key' : 'a1fe59203ad0d0f20eb16acedd06cb99',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highperformanceformat.com/a1fe59203ad0d0f20eb16acedd06cb99/invoke.js"></script>
+    </div>
+
+    <script>
+        // ========== FIREcRACKER ANIMATION ==========
+        const canvas = document.getElementById('firecrackerCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        
+        let userName = 'Friend';
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        
+        function getRandomColor() {
+            const colors = [
+                '#FF3366', // গোলাপি
+                '#FF9933', // কমলা
+                '#FFCC00', // হলুদ
+                '#33CC33', // সবুজ
+                '#33CCFF', // নীল
+                '#9966FF', // বেগুনি
+                '#FF6699', // হালকা গোলাপি
+                '#FF5050'  // লাল
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function createParticles(x, y) {
+            const particleCount = 40 + Math.floor(Math.random() * 60); // 40-100 টি পার্টিকেল
+            
+            for (let i = 0; i < particleCount; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 4 + Math.random() * 10;
+                const size = 5 + Math.random() * 15;
+                
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed - 3,
+                    size: size,
+                    color: getRandomColor(),
+                    alpha: 1.0,
+                    life: 1.0,
+                    decay: 0.008 + Math.random() * 0.015
+                });
+            }
+        }
+
+        function burstFirecrackers() {
+            const burstCount = 10 + Math.floor(Math.random() * 10); // 10-20 টি ক্র্যাকার
+            
+            for (let i = 0; i < burstCount; i++) {
+                setTimeout(() => {
+                    const x = 50 + Math.random() * (width - 100);
+                    const y = 50 + Math.random() * (height - 150);
+                    createParticles(x, y);
+                }, i * 100);
+            }
+        }
+
+        function updateParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.15;
+                p.vx *= 0.97;
+                p.vy *= 0.97;
+                
+                p.life -= p.decay;
+                p.alpha = p.life;
+                
+                if (p.life <= 0 || p.y > height + 100) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let p of particles) {
+                ctx.globalAlpha = p.alpha;
+                ctx.beginPath();
+                
+                const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x + 8, p.y + 8, p.size * 1.5);
+                gradient.addColorStop(0, p.color);
+                gradient.addColorStop(0.6, p.color);
+                gradient.addColorStop(1, 'rgba(255,255,255,0)');
+                
+                ctx.fillStyle = gradient;
+                ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animate() {
+            updateParticles();
+            drawParticles();
+            requestAnimationFrame(animate);
+        }
+
+        function startFirecrackerTimer() {
+            // প্রথমবার сразу অনেকগুলো ক্র্যাকার
+            setTimeout(() => {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        burstFirecrackers();
+                    }, i * 300);
+                }
+            }, 200);
+            
+            // নিয়মিত বিরতিতে
+            setInterval(() => {
+                burstFirecrackers();
+            }, 3000);
+        }
+
+        // URL থেকে নাম নেওয়া
+        function getParameterByName(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // পৃষ্ঠা লোড
+        window.onload = function() {
+            const personName = getParameterByName('name');
+            
+            if (personName && personName.trim() !== '') {
+                userName = personName;
+                document.getElementById('displayName').innerText = userName;
+                document.title = `Happy Holi - ${userName}`;
+            } else {
+                document.getElementById('displayName').innerText = 'Friend';
+                document.title = 'Happy Holi - Friend';
+            }
+
+            resizeCanvas();
+            animate();
+            startFirecrackerTimer();
+        };
+
+        window.addEventListener('resize', function() {
+            resizeCanvas();
+        });
+
+        const video = document.getElementById('holiVideo');
+        video.addEventListener('error', function() {
+            document.querySelector('.video-container').style.background = 'linear-gradient(145deg, #1a0b2e 0%, #2d1b45 100%)';
+        });
+    </script>
+</body>
+</html>
