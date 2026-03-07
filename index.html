@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy Holi - Create Your Personalized Wish</title>
     <!-- Font Awesome 6 Free -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -31,17 +31,18 @@
             height: 100%;
             z-index: 1;
             overflow: hidden;
+            background: #000; /* ব্যাকআপ কালার */
         }
 
         #holiVideo {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* ভিডিও পুরো স্ক্রিন কভার করবে */
         }
 
-        /* Spacer - ভিডিও দেখানোর জন্য ফাঁকা জায়গা */
+        /* Spacer - ভিডিও দেখানোর জন্য ফাঁকা জায়গা (মোবাইলের জন্য ছোট) */
         .spacer {
-            height: 60vh;
+            height: 40vh; /* ডেস্কটপের জন্য */
             width: 100%;
             position: relative;
             z-index: 2;
@@ -55,7 +56,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0 20px 100px 20px;
+            padding: 0 15px 80px 15px;
             pointer-events: none;
         }
 
@@ -63,15 +64,15 @@
             background: rgba(20, 10, 30, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-radius: 50px 50px 30px 30px;
-            padding: 40px 30px;
+            border-radius: 40px 40px 30px 30px;
+            padding: 30px 20px;
             max-width: 700px;
             width: 100%;
             border: 2px solid rgba(255, 215, 0, 0.6);
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             text-align: center;
             pointer-events: auto;
-            margin: 20px 0 30px;
+            margin: 10px 0 20px;
             animation: fadeIn 1s ease-out;
         }
 
@@ -88,26 +89,26 @@
 
         .subtitle {
             color: rgba(255,255,255,0.95);
-            font-size: 1.5rem;
-            margin-bottom: 35px;
+            font-size: 1.4rem;
+            margin-bottom: 25px;
             font-style: italic;
             text-shadow: 0 2px 10px rgba(255,150,0,0.5);
         }
 
         .input-group {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
         .input-group input {
-            padding: 18px 25px;
+            padding: 15px 20px;
             border: none;
             border-radius: 60px;
-            font-size: 1.2rem;
-            width: 320px;
+            font-size: 1.1rem;
+            width: 280px;
             background: rgba(255,255,255,0.98);
             border: 2px solid #ff9933;
             outline: none;
@@ -124,19 +125,19 @@
         }
 
         .input-group button {
-            padding: 18px 35px;
+            padding: 15px 28px;
             border: none;
             border-radius: 60px;
             background: linear-gradient(135deg, #ff416c, #ff4b2b);
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
             border: 2px solid rgba(255,255,255,0.5);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             box-shadow: 0 5px 20px rgba(255,75,43,0.4);
         }
 
@@ -147,28 +148,28 @@
 
         .share-section {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             justify-content: center;
-            margin: 25px 0 15px;
+            margin: 20px 0 10px;
             flex-wrap: wrap;
         }
 
         .share-btn {
-            padding: 16px 28px;
+            padding: 14px 20px;
             border: none;
             border-radius: 60px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
             transition: all 0.3s;
             border: 2px solid white;
             text-decoration: none;
             color: white;
             flex: 1;
-            min-width: 170px;
+            min-width: 140px;
             justify-content: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
@@ -209,28 +210,15 @@
             z-index: 15;
             width: 100%;
             text-align: center;
-            padding: 15px 0;
+            padding: 10px 0;
             background: rgba(0,0,0,0.2);
             backdrop-filter: blur(5px);
             margin-top: 5px;
         }
 
-        .ad-bottom {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            z-index: 100;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(8px);
-            padding: 10px 0;
-            border-top: 1px solid rgba(255,215,0,0.3);
-        }
-
         .ad-inline-1, .ad-inline-2 {
-            margin: 25px 0;
-            padding: 10px;
+            margin: 20px 0;
+            padding: 8px;
             background: rgba(255,255,255,0.05);
             border-radius: 20px;
             border: 1px solid rgba(255,215,0,0.2);
@@ -242,14 +230,14 @@
 
         .toast-message {
             position: fixed;
-            bottom: 120px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0,0,0,0.95);
             color: #ffcc00;
-            padding: 15px 35px;
+            padding: 12px 25px;
             border-radius: 60px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             z-index: 1000;
             border: 2px solid #ff9933;
             box-shadow: 0 5px 30px rgba(255,200,0,0.4);
@@ -260,7 +248,7 @@
         }
 
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
@@ -276,38 +264,90 @@
             background: #ff416c;
         }
 
+        /* মোবাইল ডিভাইসের জন্য স্পেসিফিক স্টাইল */
         @media (max-width: 600px) {
             .spacer {
-                height: 50vh;
+                height: 25vh; /* মোবাইলে স্পেস কমিয়ে দেওয়া */
             }
             
             .wish-box {
-                padding: 30px 20px;
+                padding: 25px 15px;
+                border-radius: 30px 30px 20px 20px;
             }
             
             .subtitle {
-                font-size: 1.3rem;
-                margin-bottom: 30px;
+                font-size: 1.2rem;
+                margin-bottom: 20px;
             }
             
             .share-btn {
-                padding: 14px 20px;
-                font-size: 1.1rem;
-                min-width: 140px;
+                padding: 12px 15px;
+                font-size: 1rem;
+                min-width: 120px;
             }
             
             .input-group input {
                 width: 100%;
-                padding: 16px 20px;
+                padding: 14px 18px;
+                font-size: 1rem;
             }
             
             .input-group button {
                 width: 100%;
                 justify-content: center;
+                padding: 14px 20px;
             }
             
             .toast-message {
-                bottom: 100px;
+                bottom: 80px;
+                font-size: 0.9rem;
+                padding: 10px 20px;
+            }
+
+            .ad-top {
+                padding: 8px 0;
+            }
+
+            .ad-inline-1, .ad-inline-2 {
+                margin: 15px 0;
+                padding: 5px;
+            }
+        }
+
+        /* ছোট মোবাইলের জন্য (iPhone SE, ইত্যাদি) */
+        @media (max-width: 375px) {
+            .spacer {
+                height: 20vh; /* আরও কম */
+            }
+
+            .wish-box {
+                padding: 20px 12px;
+            }
+
+            .share-btn {
+                min-width: 100px;
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 15px;
+            }
+        }
+
+        /* ল্যান্ডস্কেপ মোডে মোবাইল */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .spacer {
+                height: 15vh;
+            }
+            
+            .wish-box {
+                padding: 15px;
+            }
+            
+            .input-group {
+                margin-bottom: 15px;
             }
         }
     </style>
@@ -319,7 +359,7 @@
         </video>
     </div>
 
-    <!-- Ad 1: Top Banner (728x90) -->
+    <!-- Ad 1: Top Banner (728x90) - মোবাইলে responsive -->
     <div class="ad-top">
         <script>
             atOptions = {
@@ -509,6 +549,12 @@
         window.onload = function() {
             document.getElementById('friendName').value = '';
             currentName = '';
+            
+            // ভিডিও চেক করা
+            const video = document.getElementById('holiVideo');
+            video.play().catch(function(error) {
+                console.log("Video autoplay failed:", error);
+            });
         };
     </script>
 </body> 
